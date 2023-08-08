@@ -1,30 +1,95 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+
+<script>
+import axios from "axios"
+export default {
+  data() {
+    return {
+      board: {
+        name: "Project A",
+        columns: [
+          {
+            name: "Todo",
+            cards: [
+              { title: "A", estimative: 3 },
+              { title: "B", estimative: 2 },
+              { title: "C", estimative: 1 }
+            ]
+          },
+          {
+            name: "Doing",
+            cards: []
+          },
+          {
+            name: "Done",
+            cards: []
+          },
+        ]
+      },
+      columnName: ""
+    }
+  },
+  methods: {
+    addColumn(columnName) {
+      this.board.columns.push({ name: columnName, cards: [] });
+    }
+  },
+  async mounted() {
+    const response = await axios({
+      url: "http://localhost:3000/boards/1",
+      method: "get"
+    });
+    this.board = response.data;
+  }
+}
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <h3>{{ board.name }} {{ board.estimative }}</h3>
+  <div class="columns">
+    <div class="column" v-for="column in board.columns">
+      <h3>{{ column.name }} {{ column.estimative }}</h3>
+      <div class="card" v-for="card in column.cards">
+        {{ card.title }}
+      </div>
+    </div>
+    <div class="column new-column">
+      {{ columnName }}
+      <input type="text" v-model="columnName" />
+      <button v-on:click="addColumn(columnName)">Add</button>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.columns {
+  display: flex;
+  flex-direction: row;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.column {
+  width: 200px;
+  text-align: center;
+  background-color: #CCC;
+  margin-right: 5px;
+  padding: 10px;
+  border: 1px solid #000;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.new-column {
+  background-color: #EEE;
+  border: 1px dashed #CCC;
+  display: block;
+}
+
+.card {
+  text-align: center;
+  width: 100%;
+  height: 80px;
+  background-color: #F3E779;
+  border: 1px solid #000;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 </style>
