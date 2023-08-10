@@ -1,104 +1,100 @@
 <script setup lang="ts">
 import axios from "axios";
-import { computed, onMounted, reactive } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import Board from "../entities/Board";
 
-let data: any = reactive({});
-
-let columnName = "";
-let cardTitle = "";
-
-function addColumn(columnName: string) {
-  data.board.columns.push({ name: columnName, cards: [] });
-}
-function addCard(column: any, cardTitle: string) {
-  column.cards.push({ title: cardTitle, estimative: 3 });
-  column.estimative += 3;
-}
-function increaseEstimative(card: any) {
-  card.estimative++;
-}
-
-const boardEstimative = computed(() => {
-  return data.board.columns.reduce((total: number, column: any) => {
-    total += column.cards.reduce((total: number, card: any) => {
-      total += card.estimative;
-      return total;
-    }, 0);
-    return total;
-  }, 0);
-})
+const data: { board: Board | undefined } = reactive({ board: undefined });
+let cardTitle = ref("");
+let columnName = ref("");
 
 onMounted(async () => {
-  const response = await axios({
-    url: "http://localhost:3000/boards/1",
-    method: "get"
-  });
-  data.board = response.data;
-})
-
+	const response = await axios({
+		url: "http://localhost:3000/boards/1",
+		method: "get",
+	});
+	const boardData = response.data;
+	const board = new Board(boardData.name);
+	for (const columnData of boardData.columns) {
+		board.addColumn(columnData.name, columnData.estimative);
+		for (const cardData of columnData.cards) {
+			board.addCard(
+				columnData.name,
+				cardData.cardTitle,
+				cardData.estimative
+			);
+		}
+	}
+	data.board = board;
+});
 </script>
 
 <template>
-  <div v-if="data.board">
-    <h3>{{ data.board.name }} {{ boardEstimative }}</h3>
-    <div class="columns">
-      <div class="column" v-for="column in data.board.columns">
-        <h3>{{ column.name }} {{ column.estimative }}</h3>
-        <div class="card" v-for="card in column.cards">
-          {{ card.title }} {{ card.estimative }}
-          <br />
-          <button @click="increaseEstimative(card)">+</button><button>-</button>
-        </div>
-        <div class="card new-card">
-          <input type="text" v-model="cardTitle" />
-          <button v-on:click="addCard(column, cardTitle)">Add</button>
-        </div>
-      </div>
-      <div class="column new-column">
-        {{ columnName }}
-        <input type="text" v-model="columnName" />
-        <button v-on:click="addColumn(columnName)">Add</button>
-      </div>
-    </div>
-  </div>
+	<div v-if="data.board">
+		<h3>{{ data.board.name }} {{ data.board.getEstimative() }}</h3>
+		<div class="columns">
+			<div class="column" v-for="column in data.board.columns">
+				<h3>{{ column.name }} {{ column.getEstimative() }}</h3>
+				<div class="card" v-for="card in column.cards">
+					{{ card.title }} {{ card.estimative }}
+					<br />
+					<button @click="data.board?.increaseEstimative(card)">+</button><button>-</button>
+				</div>
+				<div class="card new-card">
+					<input type="text" v-model="cardTitle" />
+					<button v-on:click="
+						data.board?.addCard(column.name, cardTitle, 0)
+						">
+						Add
+					</button>
+				</div>
+			</div>
+			<div class="column new-column">
+				{{ columnName }}
+				<input type="text" v-model="columnName" />
+				<button v-on:click="data.board?.addColumn(columnName, true)">
+					Add
+				</button>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style scoped>
 .columns {
-  display: flex;
-  flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 .column {
-  width: 200px;
-  text-align: center;
-  background-color: #CCC;
-  margin-right: 5px;
-  padding: 10px;
-  border: 1px solid #000;
+	width: 200px;
+	text-align: center;
+	background-color: #ccc;
+	margin-right: 5px;
+	padding: 10px;
+	border: 1px solid #000;
 }
 
 .new-column {
-  background-color: #EEE;
-  border: 1px dashed #CCC;
-  display: block;
+	background-color: #eee;
+	border: 1px dashed #ccc;
+	display: block;
 }
 
 .card {
-  text-align: center;
-  width: 100%;
-  height: 80px;
-  background-color: #F3E779;
-  border: 1px solid #000;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+	text-align: center;
+	width: 100%;
+	height: 80px;
+	background-color: #f3e779;
+	border: 1px solid #000;
+	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
 }
 
 .new-card {
-  background-color: #EEE;
-  border: 1px dashed #CCC;
-  display: block;
+	background-color: #eee;
+	border: 1px dashed #ccc;
+	display: block;
 }
 </style>
