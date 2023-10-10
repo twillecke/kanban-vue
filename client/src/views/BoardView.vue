@@ -1,36 +1,22 @@
 <script setup lang="ts">
-import axios from "axios";
-import { computed, onMounted, reactive, ref } from "vue";
+import { inject, onMounted, reactive, ref } from "vue";
 import Board from "../entities/Board";
+import BoardService from "../services/BoardService";
 
 const data: { board: Board | undefined } = reactive({ board: undefined });
 let cardTitle = ref("");
 let columnName = ref("");
 
 onMounted(async () => {
-	const response = await axios({
-		url: "http://localhost:3000/boards/1",
-		method: "get",
-	});
-	const boardData = response.data;
-	const board = new Board(boardData.name);
-	for (const columnData of boardData.columns) {
-		board.addColumn(columnData.name, columnData.estimative);
-		for (const cardData of columnData.cards) {
-			board.addCard(
-				columnData.name,
-				cardData.cardTitle,
-				cardData.estimative
-			);
-		}
-	}
+	const boardService = inject("boardService") as BoardService;
+	const board = await boardService.getBoard(1); 
 	data.board = board;
 });
 </script>
 
 <template>
 	<div v-if="data.board">
-		<h3>{{ data.board.name }} {{ data.board.getEstimative() }}</h3>
+		<h3>{{ data.board.name }} <span id="estimative">{{ data.board.getEstimative() }}</span></h3>
 		<div class="columns">
 			<div class="column" v-for="column in data.board.columns">
 				<h3>{{ column.name }} {{ column.getEstimative() }}</h3>
