@@ -12,12 +12,12 @@ test("Deve listar as colunas", async function () {
     await connection.close();
 })
 
-// test("Deve salvar uma coluna", async function () {
-//     const connection = new PgPromiseConnection();
-//     const columnsRepository = new ColumnRepositoryDatabase(connection);
-//     const columnService = new ColumnService(columnsRepository);
-//     const output = await columnService.saveColumn(new Column("Todo", true));
-//     const column = await columnService.getColumn(output.idColumn);
-//     expect(column.name).toBe("Todo");
-//     await connection.close();
-// })
+test("Deve salvar uma coluna", async function () {
+    const connection = new PgPromiseConnection();
+    const columnsRepository = new ColumnRepositoryDatabase(connection);
+    const columnService = new ColumnService(columnsRepository);
+    const output = await columnService.saveColumn(new Column(1, 1, "Todo", true));
+    const column = await columnService.getColumn(output.idColumn);
+    expect(column.name).toBe("Todo");
+    await connection.close();
+})
