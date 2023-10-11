@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import ColumnComponent from './ColumnComponent.vue';
 import NewCardComponent from './NewCardComponent.vue';
 import NewColumnComponent from './NewColumnComponent.vue';
-
-
 defineProps(["board"]);
-let cardTitle = ref("");
-let columnName = ref("");
 </script>
 
 <template>
@@ -28,14 +23,11 @@ let columnName = ref("");
     display: flex;
     flex-direction: row;
 }
-
-
 .new-column {
     background-color: #eee;
     border: 1px dashed #ccc;
     display: block;
 }
-
 .new-card {
     background-color: #eee;
     border: 1px dashed #ccc;

@@ -7,7 +7,7 @@ defineProps(["board", "column"]);
 
 <template>
     <div class="column">
-        <h3>{{ column.name }} {{ column.getEstimative() }}</h3>
+        <h3>{{ column.name }} <span class="estimative">{{ column.getEstimative() }}</span></h3>
         <div v-for="card in column.cards">
             <CardComponent :board="board" :column="column" :card="card"></CardComponent>
         </div>
