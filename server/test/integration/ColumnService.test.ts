@@ -4,20 +4,23 @@ import ColumnRepositoryDatabase from "../../src/infra/repository/ColumnRepositor
 import ColumnService from "../../src/service/ColumnService";
 
 test("Deve listar as colunas", async function () {
-    const connection = new PgPromiseConnection();
-    const columnsRepository = new ColumnRepositoryDatabase(connection);
-    const columnService = new ColumnService(columnsRepository);
-    const columns = await columnService.getColumns(1);
-    expect(columns).toHaveLength(3);
-    await connection.close();
-})
+	const connection = new PgPromiseConnection();
+	const columnsRepository = new ColumnRepositoryDatabase(connection);
+	const columnService = new ColumnService(columnsRepository);
+	const columns = await columnService.getColumns(1);
+	expect(columns).toHaveLength(3);
+	await connection.close();
+});
 
 test("Deve salvar uma coluna", async function () {
-    const connection = new PgPromiseConnection();
-    const columnsRepository = new ColumnRepositoryDatabase(connection);
-    const columnService = new ColumnService(columnsRepository);
-    const output = await columnService.saveColumn(new Column(1, 1, "Todo", true));
-    const column = await columnService.getColumn(output.idColumn);
-    expect(column.name).toBe("Todo");
-    await connection.close();
-})
+	const connection = new PgPromiseConnection();
+	const columnsRepository = new ColumnRepositoryDatabase(connection);
+	const columnService = new ColumnService(columnsRepository);
+	const idColumn = await columnService.saveColumn(
+		new Column(1, 1, "Todo", true)
+	);
+	const column = await columnService.getColumn(idColumn);
+	expect(column.name).toBe("Todo");
+    await columnService.deleteColumn(idColumn);
+	await connection.close();
+});

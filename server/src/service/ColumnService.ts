@@ -1,12 +1,32 @@
+import Column from "../domain/entity/Column";
 import ColumnRepository from "../domain/repository/ColumnRepository";
 
 export default class ColumnService {
+	constructor(readonly columnRepository: ColumnRepository) {}
 
-    constructor(readonly columnRepository: ColumnRepository) {
-    }
+	async getColumns(idBoard: number) {
+		const columns = await this.columnRepository.findAllbyIdBoard(idBoard);
+		return columns;
+	}
 
-    async getColumns(idBoard: number) {
-        const columns = await this.columnRepository.findAllbyIdBoard(idBoard);
-        return columns;
-    }
+	async saveColumn(input: saveInput): Promise<number> {
+		const idColumn = await this.columnRepository.save(
+			new Column(input.idBoard, 1, input.name, input.hasEstimative)
+		);
+		return idColumn;
+	}
+
+	async getColumn(idColumn: number): Promise<Column> {
+		return this.columnRepository.get(idColumn);
+	}
+
+	async deleteColumn(idColumn: number): Promise<void> {
+		await this.columnRepository.delete(idColumn);
+	}
 }
+
+type saveInput = {
+	idBoard: number;
+	name: string;
+	hasEstimative: boolean;
+};
