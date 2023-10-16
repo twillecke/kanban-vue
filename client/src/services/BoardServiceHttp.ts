@@ -1,10 +1,9 @@
 import axios from "axios";
 import Board from "../entities/Board";
-import BoardService from "./BoardService";
+import BoardService, { SaveColumnInput } from "./BoardService";
 
 export default class BoardServiceHttp implements BoardService {
-	
-    async getBoard(idBoard: number): Promise<Board> {
+	async getBoard(idBoard: number): Promise<Board> {
 		const response = await axios({
 			url: `http://localhost:3000/boards/${idBoard}`,
 			method: "get",
@@ -22,5 +21,15 @@ export default class BoardServiceHttp implements BoardService {
 			}
 		}
 		return board;
+	}
+
+	async saveColumn(column: SaveColumnInput): Promise<number> {
+		const response = await axios({
+			url: `http://localhost:3000/boards/${column.idBoard}/columns`,
+			method: "post",
+			data: column,
+		});
+		const idColumn = response.data;
+		return idColumn;
 	}
 }

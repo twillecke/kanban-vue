@@ -6,9 +6,8 @@ let columnName = ref("");
 
 <template>
     <div class="column new-column">
-        {{ columnName }}
-        <input type="text" v-model="columnName" />
-        <button v-on:click="board?.addColumn(columnName, true)">
+        <input class="new-column-input" type="text" v-model="columnName" />
+        <button class="new-column-add" v-on:click="board?.addColumn(columnName, true)">
             Add
         </button>
     </div>
@@ -20,5 +19,4 @@ let columnName = ref("");
     border: 1px dashed #ccc;
     display: block;
 }
-
 </style>
