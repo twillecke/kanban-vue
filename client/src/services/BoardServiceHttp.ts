@@ -3,13 +3,13 @@ import BoardService, { SaveColumnInput } from "./BoardService";
 import HttpClient from "../infra/http/httpClient";
 
 export default class BoardServiceHttp implements BoardService {
-	constructor(readonly httpClient: HttpClient) {}
+	constructor(readonly httpClient: HttpClient, readonly baseUrl: string) {}
 
 	async getBoard(idBoard: number): Promise<Board> {
 		const boardData = await this.httpClient.get(
-			`http://localhost:3000/boards/${idBoard}`
+			`${this.baseUrl}/boards/${idBoard}`
 		);
-		const board = new Board(boardData.name);
+		const board = new Board(boardData.idBoard, boardData.name);
 		for (const columnData of boardData.columns) {
 			board.addColumn(columnData.name, columnData.estimative);
 			for (const cardData of columnData.cards) {
@@ -25,7 +25,7 @@ export default class BoardServiceHttp implements BoardService {
 
 	async saveColumn(column: SaveColumnInput): Promise<number> {
 		const idColumn = await this.httpClient.post(
-			`http://localhost:3000/boards/${column.idBoard}/columns`,
+			`${this.baseUrl}/boards/${column.idBoard}/columns`,
 			column
 		);
 		return idColumn;

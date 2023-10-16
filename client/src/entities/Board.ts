@@ -6,7 +6,7 @@ import Column from "./Column";
 export default class Board extends BaseEntity {
 	columns: Column[];
 
-	constructor(readonly name: string) {
+	constructor(readonly idBoard: number, readonly name: string) {
 		super();
 		this.columns = [];
 	}
@@ -15,7 +15,7 @@ export default class Board extends BaseEntity {
 		this.columns.push(new Column(columnName, hasEstimative));
 		this.publish(
 			new DomainEvent("addColumn", {
-				idBoard: 1,
+				idBoard: this.idBoard,
 				name: columnName,
 				hasEstimative,
 			})
