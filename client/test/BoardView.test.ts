@@ -1,6 +1,7 @@
 import { mount } from "@vue/test-utils";
 import BoardViewVue from "../src/views/BoardView.vue";
 import BoardServiceHttp from "../src/services/BoardServiceHttp";
+import AxiosAdapter from "../src/infra/http/AxiosAdapter";
 
 function sleep(ms: number) {
 	return new Promise((resolve, reject) => {
@@ -23,7 +24,8 @@ test("Deve testar o board view", async function () {
 	// 		return board;
 	// 	},
 	// };
-	const boardService = new BoardServiceHttp();
+	const httpClient = new AxiosAdapter();
+	const boardService = new BoardServiceHttp(httpClient);
 	const wrapper = mount(BoardViewVue, {
 		global: {
 			provide: {
