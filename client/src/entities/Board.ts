@@ -30,8 +30,25 @@ export default class Board extends BaseEntity {
 		column.addCard(new Card(cardTitle, cardEstimative));
 	}
 
+	deleteColumn (idColumn: number) {
+		const column = this.columns.find(column => column.idColumn === idColumn);
+		if (!column) throw new Error("Column not found");
+		this.columns.splice(this.columns.indexOf(column), 1);
+		this.publish(new DomainEvent("deleteColumn", { idBoard: this.idBoard, idColumn: column.idColumn }));
+	}
+
+	deleteCard (column: Column, idCard: number) {
+		column.deleteCard(idCard);
+		this.publish(new DomainEvent("deleteCard", { idBoard: this.idBoard, idColumn: column.idColumn, idCard }));
+	}
+
 	increaseEstimative(card: Card) {
 		card.increaseEstimative();
+	}
+
+	decreaseEstimative (column: Column, card: Card) {
+		card.decreaseEstimative();
+		this.publish(new DomainEvent("decreaseEstimative", { idBoard: this.idBoard, idColumn: column.idColumn, idCard: card.idCard, title: card.title, estimative: card.estimative }));
 	}
 
 	getEstimative() {
