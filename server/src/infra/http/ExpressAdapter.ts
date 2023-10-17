@@ -19,6 +19,16 @@ export default class ExpressAdapter implements Http {
 			);
 			next();
 		});
+		this.app.use(function (req: any, res: any, next: any) {
+			if (req.method === "OPTIONS") return next();
+			if (req.url === "/login") return next();
+			const authorization = req.headers["authorization"];			
+			if (authorization) {
+				const token = authorization.replace("Bearer ", "");
+				if (token === "123456") return next();
+			}
+			return res.status(401).end();
+		});
 	}
 
 	route(method: string, url: string, callback: Function): void {

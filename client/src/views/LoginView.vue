@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useAuthStore } from '../stores/AuthStore'
 
 const username = ref("");
 const password = ref("");
 
-
-function login(username: string, password: string) {
-    console.log("login");
-}
+const authStore = useAuthStore()
 
 </script>
 
 <template>
     <input type="text" v-model="username" />
-    <input type="password" v-model="password">
-    <button @click="login(username, password)">Login</button>
+    <input type="text" v-model="password">
+    <button @click="authStore.login(username, password)">Login</button>
 </template>
