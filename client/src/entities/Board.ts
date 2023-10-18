@@ -31,7 +31,7 @@ export default class Board extends BaseEntity {
 			(column) => column.name === columnName
 		);
 		if (!column) throw new Error("Column not found");
-		const card = new Card(cardTitle, cardEstimative);
+		const card = new Card(cardTitle, cardEstimative, "white");
 		column.addCard(card);
 		this.publish(
 			new DomainEvent("addCard", {
