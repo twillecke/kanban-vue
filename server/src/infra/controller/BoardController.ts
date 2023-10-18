@@ -140,5 +140,18 @@ export default class BoardController {
 				await cardService.deleteCard(parseInt(params.idCard));
 			}
 		);
+
+		http.route(
+			"post",
+			"/boards/:idBoard/updatePositionMap",
+			async function (params: any, body: any) {
+				const boardService = new BoardService(
+					boardRepository,
+					columnRepository,
+					cardRepository
+				);
+				await boardService.updatePositionMap(body);
+			}
+		);
 	}
 }
