@@ -1,7 +1,7 @@
 import Board from "../entities/Board";
 import Card from "../entities/Card";
 import Column from "../entities/Column";
-import HttpClient from "../infra/http/httpClient";
+import HttpClient from "../infra/http/HttpClient";
 import BoardService, {
 	SaveBoardInput,
 	SaveCardInput,
@@ -25,7 +25,11 @@ export default class BoardServiceHttp implements BoardService {
 			column.idColumn = columnData.idColumn;
 			board.columns.push(column);
 			for (const cardData of columnData.cards) {
-				const card = new Card(cardData.title, cardData.estimative);
+				const card = new Card(
+					cardData.title,
+					cardData.estimative,
+					cardData.color
+				);
 				card.idCard = cardData.idCard;
 				column.cards.push(card);
 			}
