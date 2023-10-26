@@ -9,7 +9,11 @@ test("Deve listar os quadros", async function () {
 	const boardRepository = new BoardRepositoryDatabase(connection);
 	const columnRepository = new ColumnRepositoryDatabase(connection);
 	const cardRepository = new CardRepositoryDatabase(connection);
-	const boardService = new BoardService(boardRepository, columnRepository, cardRepository);
+	const boardService = new BoardService(
+		boardRepository,
+		columnRepository,
+		cardRepository
+	);
 	const boards = await boardService.getBoards();
 	expect(boards).toHaveLength(1);
 	const [board] = boards;
@@ -22,7 +26,11 @@ test("Deve retornar um quadro", async function () {
 	const boardRepository = new BoardRepositoryDatabase(connection);
 	const columnRepository = new ColumnRepositoryDatabase(connection);
 	const cardRepository = new CardRepositoryDatabase(connection);
-	const boardService = new BoardService(boardRepository, columnRepository, cardRepository);
+	const boardService = new BoardService(
+		boardRepository,
+		columnRepository,
+		cardRepository
+	);
 	const board = await boardService.getBoard(1);
 	expect(board.name).toBe("Projeto 1");
 	// expect(board.columns).toHaveLength(3);

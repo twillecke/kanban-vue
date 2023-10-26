@@ -15,4 +15,15 @@ let cardTitle = ref("");
 	text-align: center;
 	padding: 20px;
 }
+
+.new-card-input {
+    padding: 0.35rem;
+    border-radius: 5px;
+    border: solid 2px #DDD;
+    transition: border-color 0.3s; 
+}
+.new-card-input:focus {
+    border-color: lightblue; 
+	outline: none;
+}
 </style>

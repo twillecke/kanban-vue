@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-    Boards
+    <h1>Boards</h1> 
     <hr />
     <RouterLink to="/boards/1">Projeto 1</RouterLink>
     <br>

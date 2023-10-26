@@ -18,11 +18,16 @@ defineProps(["board", "column"]);
 .column {
 	width: 200px;
 	text-align: center;
-	background-color: #CCC;
+	background-color: #EEE;
 	margin-right: 5px;
-	padding: 10px;
-	border: 1px solid #000;
+	padding: 1rem;
+	border: 1px solid #CCC;
 	min-height: 500px;
 	border-radius: 5px;
+}
+
+button{
+	border-radius: 5px;
+	border: solid 1px #AAA;
 }
 </style>

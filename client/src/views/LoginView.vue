@@ -10,7 +10,7 @@ const authStore = useAuthStore()
 </script>
 
 <template>
-    <input type="text" v-model="username" />
-    <input type="text" v-model="password">
+    <input type="text" placeholder="*user" v-model="username" />
+    <input type="text" placeholder="*password" v-model="password">
     <button @click="authStore.login(username, password)">Login</button>
 </template>
