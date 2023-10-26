@@ -24,6 +24,7 @@ defineProps(["board", "column", "card"]);
 	background-color: #F3E779;
 	border: 1px solid #000;
 	margin-bottom: 10px;
+	border-radius: 5px;
 }
 
 .card-title {

@@ -23,5 +23,6 @@ defineProps(["board", "column"]);
 	padding: 10px;
 	border: 1px solid #000;
 	min-height: 500px;
+	border-radius: 5px;
 }
 </style>
